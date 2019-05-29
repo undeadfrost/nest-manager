@@ -1,8 +1,12 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
 import { CreateCatDto, UpdateCatDto, ListAllEntities } from './create-cat.dto';
+import { CatService } from './cat.service';
 
 @Controller('cats')
 export class CatsController {
+  constructor(private catService: CatService) {
+  }
+
   @Post()
   create(@Body() createCatDto: CreateCatDto) {
     return 'This action adds a new cat';
