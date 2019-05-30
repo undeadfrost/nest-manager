@@ -1,0 +1,10 @@
+{
+  "type": "mysql",
+  "host": "148.70.53.238",
+  "port": 3306,
+  "username": "root",
+  "password": "libo1121X",
+  "database": "nest_manager",
+  "entities": ["src/modules/**/*.entity{.ts,.js}"],
+  "synchronize": true
+}
