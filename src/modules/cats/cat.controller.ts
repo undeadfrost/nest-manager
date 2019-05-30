@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateCatDto, UpdateCatDto, ListAllEntities } from './create-cat.dto';
 import { CatService } from './cat.service';
+import { CatInterface } from './cat.interface';
 
 @Controller('cats')
 export class CatsController {
@@ -8,13 +9,14 @@ export class CatsController {
   }
 
   @Post()
+  @UsePipes(new ValidationPipe({ transform: true }))
   create(@Body() createCatDto: CreateCatDto) {
-    return 'This action adds a new cat';
+    return this.catService.create(createCatDto);
   }
 
   @Get()
-  findAll(@Query() query: ListAllEntities) {
-    return `This action returns all cats (limit: ${query.limit} name: ${query.name} items)`;
+  async findAll(): Promise<CatInterface[]> {
+    return this.catService.findAll();
   }
 
   @Get(':id')
