@@ -5,6 +5,6 @@
   "username": "root",
   "password": "libo1121X",
   "database": "nest_manager",
-  "entities": ["src/modules/**/*.entity{.ts,.js}"],
+  "entities": ["dist/**/*.entity{.ts,.js}"],
   "synchronize": true
 }

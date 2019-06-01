@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatModule } from './modules/cats/cat.module';
-import { SysModule } from './modules/sys/sys.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PhotoModule } from './photo/photo.module';
+
+import { SysModule } from './modules/sys/sys.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), PhotoModule],
+  imports: [TypeOrmModule.forRoot(), SysModule],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
 }

@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './entitys/user.entity';
-import { Photo } from './entitys/photo.entity';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Photo])]
+  imports: [
+    UserModule,
+    AuthModule,
+  ],
 })
 
-export class SysModule { }
+export class SysModule {
+}
