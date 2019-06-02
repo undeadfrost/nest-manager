@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+
 import { JwtPayload } from './jwt-payload.interface';
 import { UserService } from '../user/user.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -20,5 +22,11 @@ export class AuthService {
 
   async validateUser(payload: JwtPayload): Promise<any> {
     return await this.userService.findOneByUsername(payload.username);
+  }
+
+  async createUser(user: User): Promise<any> {
+    const existUser = await this.userService.findOneByUsername(user.username);
+    user.createTime = new Date();
+    return this.userService.saveUser(user);
   }
 }

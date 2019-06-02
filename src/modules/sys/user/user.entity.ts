@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
+
 import { Menu } from '../menu/menu.entity';
 
 @Entity('sys_user')
@@ -15,7 +16,7 @@ export class User {
   @Column({ nullable: true, length: 11, comment: '手机号' })
   mobile: string;
 
-  @Column({ default: 1, comment: '状态' })
+  @Column({ default: 0, comment: '状态' })
   status: boolean;
 
   @Column({ nullable: true, comment: '头像' })
