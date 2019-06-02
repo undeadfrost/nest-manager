@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
+import {IsNotEmpty} from 'class-validator';
 
 import { Menu } from '../menu/menu.entity';
 
@@ -7,6 +8,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @IsNotEmpty()
   @Column({ unique: true, comment: '用户名' })
   username: string;
 

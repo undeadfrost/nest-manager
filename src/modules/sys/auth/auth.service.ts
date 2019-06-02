@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { JwtPayload } from './jwt-payload.interface';
@@ -26,6 +26,9 @@ export class AuthService {
 
   async createUser(user: User): Promise<any> {
     const existUser = await this.userService.findOneByUsername(user.username);
+    if (existUser) {
+      throw new HttpException('用户名已存在！', HttpStatus.CONFLICT);
+    }
     user.createTime = new Date();
     return this.userService.saveUser(user);
   }
