@@ -1,14 +1,34 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Base64 } from 'js-base64';
+import { createHash } from 'crypto';
+
 
 import { JwtPayload } from './jwt-payload.interface';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
+import { AuthRegisterDto } from './auth.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService,
-              private readonly userService: UserService) {
+    private readonly userService: UserService) {
+  }
+
+  /**
+   * 密码编码
+   * @param password 
+   */
+  private decodeBase64(password: string) {
+    return password ? Base64.decode(password) : password;
+  }
+
+  /**
+   * MD5编码
+   * @param password 
+   */
+  private decodeSha1(password: string) {
+    return createHash('sha1').update(password).digest('base64');
   }
 
   async createToken(username: string) {
@@ -24,12 +44,17 @@ export class AuthService {
     return await this.userService.findOneByUsername(payload.username);
   }
 
-  async createUser(user: User): Promise<any> {
-    const existUser = await this.userService.findOneByUsername(user.username);
+  async createUser(authRegisterDto: AuthRegisterDto): Promise<any> {
+    const { username, password } = authRegisterDto;
+    const existUser = await this.userService.findOneByUsername(username);
     if (existUser) {
       throw new HttpException('用户名已存在！', HttpStatus.CONFLICT);
     }
+    const user = new User();
+    user.username = username;
+    user.password = this.decodeSha1(password);
     user.createTime = new Date();
-    return this.userService.saveUser(user);
+    await this.userService.saveUser(user);
+    return { status: 'success', message: '创建用户成功,请妥善保管信息！' };
   }
 }

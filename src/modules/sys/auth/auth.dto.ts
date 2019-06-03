@@ -1,6 +1,6 @@
-import {IsNotEmpty, IsString} from 'class-validator';
+import {IsNotEmpty, IsString, MinLength} from 'class-validator';
 
-export class AuthBaseDto {
+export class AuthLoginDto {
   @IsNotEmpty()
   @IsString()
   readonly username: string;
@@ -9,4 +9,12 @@ export class AuthBaseDto {
   readonly password: string;
 }
 
-export class AuthLoginDto extends AuthBaseDto {}
+export class AuthRegisterDto {
+  @IsNotEmpty()
+  @MinLength(5)
+  readonly username: string;
+
+  @IsNotEmpty()
+  @MinLength(6)
+  readonly password: string;
+}
