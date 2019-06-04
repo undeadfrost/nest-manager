@@ -11,6 +11,7 @@ export class AuthLoginDto {
 
 export class AuthRegisterDto {
   @IsNotEmpty()
+  @IsString()
   @MinLength(5)
   readonly username: string;
 

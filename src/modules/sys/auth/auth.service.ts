@@ -12,12 +12,12 @@ import { AuthRegisterDto } from './auth.dto';
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService,
-    private readonly userService: UserService) {
+              private readonly userService: UserService) {
   }
 
   /**
    * 密码编码
-   * @param password 
+   * @param password
    */
   private decodeBase64(password: string) {
     return password ? Base64.decode(password) : password;
@@ -25,10 +25,10 @@ export class AuthService {
 
   /**
    * MD5编码
-   * @param password 
+   * @param password
    */
   private decodeSha1(password: string) {
-    return createHash('sha1').update(password).digest('base64');
+    return createHash('sha1').update(password).digest('hex');
   }
 
   async createToken(username: string) {
@@ -52,7 +52,7 @@ export class AuthService {
     }
     const user = new User();
     user.username = username;
-    user.password = this.decodeSha1(password);
+    user.password = this.decodeSha1(username + password);
     user.createTime = new Date();
     await this.userService.saveUser(user);
     return { status: 'success', message: '创建用户成功,请妥善保管信息！' };
