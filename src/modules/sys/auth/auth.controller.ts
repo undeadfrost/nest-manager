@@ -11,18 +11,11 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() authLoginDto: AuthLoginDto) {
-    return await this.authService.createToken(authLoginDto.username);
+    return await this.authService.loginUser(authLoginDto);
   }
 
   @Post('register')
   register(@Body() authRegisterDto: AuthRegisterDto) {
     return this.authService.createUser(authRegisterDto);
-  }
-
-  @Get('data')
-  @UseGuards(AuthGuard())
-  findAll() {
-    // this route is restricted by AuthGuard
-    // JWT strategy
   }
 }

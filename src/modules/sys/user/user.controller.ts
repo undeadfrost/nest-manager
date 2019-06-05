@@ -7,20 +7,4 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {
   }
-
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.userService.findAllUsername();
-  }
-
-  @Get('/username')
-  findUser(@Query('username') username) {
-    return this.userService.findOneByUsername(username);
-  }
-
-  @Get('/test')
-  findOk(): string {
-    return 'test';
-  }
 }
