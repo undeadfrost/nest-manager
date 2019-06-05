@@ -8,6 +8,10 @@ export class LoggingInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
     console.info(`  --> ${request.method}  ${request.url}`);
     const now = Date.now();
-    return next.handle().pipe(tap(() => console.info(`  <-- ${request.method}  ${request.url} ${Date.now() - now}ms`)));
+    return next
+      .handle()
+      .pipe(
+        tap(() => console.info(`  <-- ${request.method}  ${request.url} ${Date.now() - now}ms`)),
+      );
   }
 }
