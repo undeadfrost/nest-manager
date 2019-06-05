@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { Base64 } from 'js-base64';
 import { createHash } from 'crypto';
 
-
 import { JwtPayload } from './jwt-payload.interface';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
@@ -35,7 +34,7 @@ export class AuthService {
     const user: JwtPayload = { username };
     const accessToken = this.jwtService.sign(user);
     return {
-      expiresIn: 3600,
+      expiresIn: 5,
       accessToken,
     };
   }
