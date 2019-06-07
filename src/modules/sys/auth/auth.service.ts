@@ -6,7 +6,7 @@ import { createHash } from 'crypto';
 import { JwtPayload } from './jwt-payload.interface';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
-import { AuthRegisterDto } from './auth.dto';
+import { AuthRegisterDto, AuthLoginDto } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,13 +34,26 @@ export class AuthService {
     const user: JwtPayload = { username };
     const accessToken = this.jwtService.sign(user);
     return {
-      expiresIn: 5,
+      expiresIn: 3600,
       accessToken,
     };
   }
 
   async validateUser(payload: JwtPayload): Promise<any> {
     return await this.userService.findOneByUsername(payload.username);
+  }
+
+  async login(authLoginDto: AuthLoginDto): Promise<any> {
+    const { username, password } = authLoginDto;
+    const user = await this.userService.findOneByUsername(username);
+    if (!user) {
+      throw new HttpException('用户名不存在!', HttpStatus.UNAUTHORIZED);
+    }
+    const encryptPassword = this.decodeSha1(username + password);
+    if (user.password !== encryptPassword) {
+      throw new HttpException('密码错误!', HttpStatus.UNAUTHORIZED);
+    }
+    return this.createToken(username);
   }
 
   async createUser(authRegisterDto: AuthRegisterDto): Promise<any> {

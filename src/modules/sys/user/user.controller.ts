@@ -18,9 +18,4 @@ export class UserController {
   findUser(@Query('username') username) {
     return this.userService.findOneByUsername(username);
   }
-
-  @Get('/test')
-  findOk(): string {
-    return 'test';
-  }
 }

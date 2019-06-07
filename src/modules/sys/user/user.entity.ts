@@ -30,9 +30,9 @@ export class User {
   @Column({ nullable: true, type: 'datetime', comment: '最后登录时间' })
   lastSignTime: Date;
 
-  @ManyToMany(type => Menu)
+  @ManyToMany(type => Menu, menu => menu.users)
   @JoinTable({
     name: 'sys_user_menu',
   })
-  menu: Menu;
+  menus: Menu[];
 }

@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 import { Resource } from '../resource/resource.entity';
+import { User } from '../user/user.entity';
 
 @Entity('sys_menu')
 export class Menu {
@@ -26,6 +27,9 @@ export class Menu {
 
   @Column({ nullable: true, comment: '菜单排序' })
   orderNumb: number;
+
+  @ManyToMany(type => User, user => user.menus)
+  users: User[];
 
   @ManyToMany(type => Resource)
   @JoinTable({
