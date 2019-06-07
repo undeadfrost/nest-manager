@@ -13,7 +13,7 @@ export class UserService {
   }
 
   findOneByUsername(username: string): Promise<User | undefined> {
-    return this.userRepository.findOne({ username });
+    return this.userRepository.findOne({ where: { username }, relations: ['menus'] });
   }
 
   async saveUser(user: User): Promise<User> {
