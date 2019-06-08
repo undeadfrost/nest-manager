@@ -31,7 +31,7 @@ export class Menu {
   description: string;
 
   @Column({ nullable: true, comment: '菜单排序' })
-  orderNumb: number;
+  orderNum: number;
 
   @ManyToMany(type => Role, role => role.menus)
   roles: Role[];

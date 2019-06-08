@@ -1,11 +1,16 @@
 import { Controller, Get, UseGuards, Body, Post } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+
 import { AuthService } from './auth.service';
 import { AuthLoginDto, AuthRegisterDto } from './auth.dto';
+import { JwtAuthGuard } from '../../../guards/auth.guard';
+import { User } from '../../../decorator/user.decorator';
+import { User as UserEntity } from '../user/user.entity';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService
+  ) {
   }
 
   @Post('login')
@@ -16,5 +21,17 @@ export class AuthController {
   @Post('register')
   register(@Body() authRegisterDto: AuthRegisterDto) {
     return this.authService.createUser(authRegisterDto);
+  }
+
+  @Get('navs')
+  @UseGuards(JwtAuthGuard)
+  getMenus(@User() user: UserEntity) {
+    return this.authService.getUserNav(user);
+  }
+
+  @Get('permissions')
+  @UseGuards(JwtAuthGuard)
+  getPermissions(@User() user: UserEntity) {
+    return this.authService.getUserPermissions(user);
   }
 }

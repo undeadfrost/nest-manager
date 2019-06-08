@@ -12,23 +12,15 @@ export class MenuService {
   ) {
   }
 
-  async findUserMenu(user: any): Promise<any> {
-    const menuList = await this.menuRepository.createQueryBuilder('menu')
-      .innerJoin('menu.users', 'user')
-      .where('user.id = :userId', { userId: user.id })
-      .orderBy('menu.orderNumb')
+  /**
+   * 获取角色对应菜单
+   * @param roleIds
+   */
+  async findUserMenuByRole(roleIds: number[]): Promise<any> {
+    return await this.menuRepository.createQueryBuilder('menu')
+      .innerJoin('menu.roles', 'role')
+      .where('role.id IN (:...roleIds)', { roleIds })
+      .orderBy('menu.orderNum')
       .getMany();
-    const navList = [];
-    menuList.forEach(menu => {
-      if (menu.parentId === 0) {
-        navList.push(menu);
-      }
-    });
-    navList.forEach(nav => {
-      if (nav.type === 0) {
-        nav.submenus = menuList.filter(menu => menu.type === 1 && menu.parentId === nav.id);
-      }
-    });
-    return { status: 'success', data: navList };
   }
 }

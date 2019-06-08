@@ -16,7 +16,15 @@ export class UserService {
     return this.userRepository.findOne({ where: { username }, relations: ['roles'] });
   }
 
+  /**
+   * 保存用户
+   * @param user
+   */
   async saveUser(user: User): Promise<User> {
     return this.userRepository.save(user);
+  }
+
+  async findAllUsername(): Promise<User[]> {
+    return await this.userRepository.find();
   }
 }
