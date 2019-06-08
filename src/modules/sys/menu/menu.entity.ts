@@ -1,6 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
-import { Resource } from '../resource/resource.entity';
-import { User } from '../user/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Role } from '../role/role.entity';
 
 @Entity('sys_menu')
 export class Menu {
@@ -13,27 +12,27 @@ export class Menu {
   @Column({ nullable: true, comment: '路由' })
   router: string;
 
-  @Column({ type: 'int', comment: '父级目录ID' })
+  @Column({ nullable: true, type: 'int' })
   parentId: number;
 
-  @Column({ nullable: true, comment: '信息' })
-  description: string;
+  @Column({ nullable: true, comment: '父级菜单名称' })
+  parentName: string;
 
-  @Column({ type: 'int', comment: '类型 0顶级目录,1子菜单,2隐藏菜单' })
+  @Column({ type: 'int', comment: '类型 0目录,1菜单,2权限' })
   type: number;
+
+  @Column({ nullable: true, comment: '权限标识' })
+  permission: string;
 
   @Column({ nullable: true, comment: '目录图标' })
   icon: string;
 
+  @Column({ nullable: true, comment: '描述' })
+  description: string;
+
   @Column({ nullable: true, comment: '菜单排序' })
   orderNumb: number;
 
-  @ManyToMany(type => User, user => user.menus)
-  users: User[];
-
-  @ManyToMany(type => Resource)
-  @JoinTable({
-    name: 'sys_menu_resource',
-  })
-  resource: Resource;
+  @ManyToMany(type => Role, role => role.menus)
+  roles: Role[];
 }
