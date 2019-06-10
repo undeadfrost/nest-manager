@@ -98,8 +98,7 @@ export class AuthService {
     user.salt = salt;
     user.password = this.cryptPassword(password, salt);
     user.createTime = new Date();
-    await this.userService.saveUser(user);
-    return { status: 'success', message: '创建用户成功,请妥善保管信息！' };
+    return this.userService.saveUser(user);
   }
 
   /**

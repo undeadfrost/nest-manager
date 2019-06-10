@@ -15,23 +15,27 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() authLoginDto: AuthLoginDto) {
-    return await this.authService.login(authLoginDto);
+    const data = await this.authService.login(authLoginDto);
+    return { status: 'success', data, message: '登录成功!' };
   }
 
   @Post('register')
-  register(@Body() authRegisterDto: AuthRegisterDto) {
-    return this.authService.createUser(authRegisterDto);
+  async register(@Body() authRegisterDto: AuthRegisterDto) {
+    await this.authService.createUser(authRegisterDto);
+    return { status: 'success', message: '创建用户成功,请妥善保管信息！' };
   }
 
   @Get('navs')
   @UseGuards(JwtAuthGuard)
-  getMenus(@User() user: UserEntity) {
-    return this.authService.getUserNav(user);
+  async getMenus(@User() user: UserEntity) {
+    const data = await this.authService.getUserNav(user);
+    return { status: 'success', data };
   }
 
   @Get('permissions')
   @UseGuards(JwtAuthGuard)
-  getPermissions(@User() user: UserEntity) {
-    return this.authService.getUserPermissions(user);
+  async getPermissions(@User() user: UserEntity) {
+    const data = await this.authService.getUserPermissions(user);
+    return { status: 'success', data };
   }
 }

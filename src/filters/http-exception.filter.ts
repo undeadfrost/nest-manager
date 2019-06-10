@@ -1,7 +1,7 @@
 import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common';
 import { HttpException } from '@nestjs/common';
 
-import { ErrorHttpStatus } from '../interfaces/http.interface';
+import { EHttpStatus } from '../interfaces/http.interface';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -14,7 +14,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     response
       .status(status)
       .jsonp({
-        status: ErrorHttpStatus.Error,
+        status: EHttpStatus.Error,
         message: errorMessage,
       });
   }
