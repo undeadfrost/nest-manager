@@ -11,6 +11,8 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
+  @Permission('sys:user:list')
   findAll() {
     return this.userService.findAllUsername();
   }

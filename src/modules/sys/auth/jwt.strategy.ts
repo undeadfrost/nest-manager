@@ -19,6 +19,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException();
     }
+    const permissions = await this.authService.getUserPermissions(user);
+    user.permissions = permissions;
     return user;
   }
 }

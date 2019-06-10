@@ -2,27 +2,21 @@ import { ExecutionContext, Injectable, UnauthorizedException, Inject } from '@ne
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 
-import { MenuService } from '../modules/sys/menu/menu.service';
-
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
-    private readonly reflector: Reflector,
-    @Inject('MenuService')
-    private readonly menuService: MenuService) {
+    private readonly reflector: Reflector) {
     super();
   }
 
   async canActivate(context: ExecutionContext) {
     const can = await super.canActivate(context);
+    const request = context.switchToHttp().getRequest();
     const permission = this.reflector.get<string>('permission', context.getHandler());
     if (can && permission) {
-      console.log(permission);
-      console.log(this.menuService);
+      return request.user.permissions.includes(permission);
     }
-    const x = await this.menuService.findUserMenuByRole([1, 2]);
-    console.log(x);
-    return true;
+    return can;
   }
 
   handleRequest(err, user, info) {

@@ -1,11 +1,5 @@
-import {Controller, Get, UseGuards} from '@nestjs/common';
-import { JwtAuthGuard } from '../../../guards/auth.guard';
+import { Controller } from '@nestjs/common';
 
 @Controller('sys/role')
 export class RoleController {
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  role() {
-    return 'role';
-  }
 }
