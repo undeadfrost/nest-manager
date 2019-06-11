@@ -15,14 +15,14 @@ export class AuthController {
   ) {
   }
 
-  @ApiOperation({title: '注册'})
+  @ApiOperation({title: '登录'})
   @Post('login')
   async login(@Body() authLoginDto: AuthLoginDto) {
     const data = await this.authService.login(authLoginDto);
     return { status: 'success', data, message: '登录成功!' };
   }
 
-  @ApiOperation({title: '登录'})
+  @ApiOperation({title: '注册'})
   @Post('register')
   async register(@Body() authRegisterDto: AuthRegisterDto) {
     await this.authService.createUser(authRegisterDto);
