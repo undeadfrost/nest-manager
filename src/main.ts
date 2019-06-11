@@ -12,14 +12,14 @@ async function bootstrap() {
     .setTitle('nest-manager')
     .setDescription('The nest-manager API description')
     .setVersion('1.0')
-    .addTag('nest-manager')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('swagger', app, document);
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new LoggingInterceptor());
-  await app.listen(3000);
+  await app.listen(3003);
 }
 
 bootstrap();
