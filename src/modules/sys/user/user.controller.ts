@@ -1,11 +1,14 @@
 import { Controller, Get, UseGuards, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiUseTags } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../../../guards/auth.guard';
 import { UserService } from './user.service';
 import { Permission } from '../../../decorator/permission.decorator';
+import { from } from 'rxjs';
 
-@Controller('user')
+@ApiUseTags('user')
+@Controller('/sys/user')
 export class UserController {
   constructor(private readonly userService: UserService) {
   }
@@ -13,8 +16,8 @@ export class UserController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @Permission('sys:user:list')
-  findAll() {
-    return this.userService.findAllUsername();
+  findUserAll() {
+    return this.userService.findUserAll();
   }
 
   @Get('/username')

@@ -27,4 +27,8 @@ export class UserService {
   async findAllUsername(): Promise<User[]> {
     return await this.userRepository.find();
   }
+
+  findUserAll(): Promise<any> {
+    return this.userRepository.find({ select: ['id', 'username', 'email', 'mobile', 'status', 'createTime', 'lastSignTime'] });
+  }
 }

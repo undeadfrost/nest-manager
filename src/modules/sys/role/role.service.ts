@@ -23,4 +23,8 @@ export class RoleService {
       .where('user.id = :userId', { userId: user.id })
       .getMany();
   }
+
+  findRoleAll(): Promise<any> {
+    return this.roleRepository.find();
+  }
 }
