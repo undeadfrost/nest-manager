@@ -24,8 +24,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Permission('sys:user:create')
   createUser(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto)
-    return 'x';
+    return createUserDto;
   }
 
   @Get('/username')
