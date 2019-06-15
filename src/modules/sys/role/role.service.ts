@@ -27,4 +27,10 @@ export class RoleService {
   findRoleAll(): Promise<any> {
     return this.roleRepository.find();
   }
+
+  findRoleByIds(ids: number[]): Promise<any> {
+    return this.roleRepository.createQueryBuilder('role')
+      .where('role.id IN (:...ids)', { ids: [...ids] })
+      .getMany();
+  }
 }

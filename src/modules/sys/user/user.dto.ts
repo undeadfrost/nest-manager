@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsMobilePhone,
   IsBoolean,
+  IsArray,
   IsNumber,
 } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
@@ -44,8 +45,8 @@ export class CreateUserDto {
   @IsBoolean()
   status: boolean;
 
-  @ApiModelProperty({ required: false })
+  @ApiModelProperty({ required: false, type: [Number] })
   @IsOptional()
-  @IsNumber()
-  roles: number;
+  @IsArray()
+  roleIds: number[];
 }

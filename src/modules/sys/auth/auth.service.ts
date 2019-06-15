@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { createHash } from 'crypto';
 
 import { JwtPayload } from './jwt-payload.interface';
 import { UserService } from '../user/user.service';
@@ -8,6 +7,7 @@ import { RoleService } from '../role/role.service';
 import { MenuService } from '../menu/menu.service';
 import { User } from '../user/user.entity';
 import { AuthLoginDto, AuthRegisterDto } from './auth.dto';
+import * as utils from '../../../common/utils';
 
 @Injectable()
 export class AuthService {
@@ -16,32 +16,6 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly roleService: RoleService,
     private readonly menuService: MenuService) {
-  }
-
-  /**
-   * 随机盐值生成
-   * @return 6位数字
-   */
-  private getRandomSalt(): string {
-    return Math.random().toString().slice(2, 8);
-  }
-
-  /**
-   * MD5编码
-   * @param password
-   * @return MD5编码之后数据
-   */
-  private decodeMd5(password: string): string {
-    return createHash('md5').update(password).digest('hex');
-  }
-
-  /**
-   * 密码加密
-   * @param password
-   * @param salt
-   */
-  private cryptPassword(password: string, salt: string): string {
-    return this.decodeMd5(`${password}@@${salt}`);
   }
 
   /**
@@ -75,7 +49,7 @@ export class AuthService {
     if (!user) {
       throw new HttpException('用户名不存在!', HttpStatus.UNAUTHORIZED);
     }
-    const encryptPassword: string = this.cryptPassword(password, user.salt);
+    const encryptPassword: string = utils.cryptPassword(password, user.salt);
     if (user.password !== encryptPassword) {
       throw new HttpException('密码错误!', HttpStatus.UNAUTHORIZED);
     }
@@ -86,17 +60,17 @@ export class AuthService {
    * 创建用户
    * @param authRegisterDto
    */
-  async createUser(authRegisterDto: AuthRegisterDto): Promise<any> {
+  async register(authRegisterDto: AuthRegisterDto): Promise<any> {
     const { username, password } = authRegisterDto;
     const existUser: User = await this.userService.findOneByUsername(username);
     if (existUser) { // 判断用户名是否已经被注册
       throw new HttpException('用户名已存在！', HttpStatus.CONFLICT);
     }
-    const salt: string = this.getRandomSalt();
+    const salt: string = utils.getRandomSalt();
     const user: User = new User();
     user.username = username;
     user.salt = salt;
-    user.password = this.cryptPassword(password, salt);
+    user.password = utils.cryptPassword(password, salt);
     user.createTime = new Date();
     return this.userService.saveUser(user);
   }

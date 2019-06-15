@@ -25,7 +25,7 @@ export class AuthController {
   @ApiOperation({title: '注册'})
   @Post('register')
   async register(@Body() authRegisterDto: AuthRegisterDto) {
-    await this.authService.createUser(authRegisterDto);
+    await this.authService.register(authRegisterDto);
     return { status: 'success', message: '创建用户成功,请妥善保管信息！' };
   }
 
