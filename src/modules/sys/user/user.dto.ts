@@ -9,6 +9,7 @@ import {
   IsBoolean,
   IsArray,
   IsNumber,
+  ValidateIf,
 } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
@@ -31,21 +32,59 @@ export class CreateUserDto {
   password: string;
 
   @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
   @IsOptional()
   @IsEmail()
   email: string;
 
   @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
   @IsOptional()
   @IsMobilePhone('zh-CN')
   mobile: string;
 
   @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
   @IsOptional()
   @IsBoolean()
   status: boolean;
 
   @ApiModelProperty({ required: false, type: [Number] })
+  @ValidateIf((object, value) => value !== '')
+  @IsOptional()
+  @IsArray()
+  roleIds: number[];
+}
+
+export class UpdateUserDto {
+  @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
+  @IsOptional()
+  @IsString()
+  @MinLength(5)
+  @MaxLength(25)
+  password: string;
+
+  @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
+  @IsOptional()
+  @IsEmail()
+  email: string;
+
+  @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
+  @IsOptional()
+  @IsMobilePhone('zh-CN')
+  mobile: string;
+
+  @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
+  @IsOptional()
+  @IsBoolean()
+  status: boolean;
+
+  @ApiModelProperty({ required: false, type: [Number] })
+  @ValidateIf((object, value) => value !== '')
   @IsOptional()
   @IsArray()
   roleIds: number[];
