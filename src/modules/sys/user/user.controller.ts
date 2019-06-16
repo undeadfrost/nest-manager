@@ -37,16 +37,16 @@ export class UserController {
   @ApiOperation({ title: '删除单个用户' })
   @Delete(':id')
   @Permission('sys:user:delete')
-  async delUserOne(@Param() params) {
-    await this.userService.delUserOne(params.id);
+  async delUserOne(@Param('id') id: number) {
+    await this.userService.delUserOne(id);
     return { status: 'success', message: '删除用户成功！' };
   }
 
   @ApiOperation({ title: '修改用户信息' })
   @Put(':id')
   @Permission('sys:user:update')
-  async putUserInfo(@Param() params, @Body() updateUserDto: UpdateUserDto) {
-    await this.userService.putUserInfo(params.id, updateUserDto);
+  async putUserInfo(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    await this.userService.putUserInfo(id, updateUserDto);
     return { status: 'success', message: '修改用户信息成功！' };
   }
 }
