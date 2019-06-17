@@ -1,10 +1,10 @@
 import { Controller, Get, Post, UseGuards, Query, Body, Delete, Param, Put } from '@nestjs/common';
-import { ApiUseTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiUseTags, ApiOperation, ApiBearerAuth, ApiModelProperty, ApiImplicitQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../../../guards/auth.guard';
 import { UserService } from './user.service';
 import { Permission } from '../../../decorator/permission.decorator';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { CreateUserDto, UpdateUserDto, GetUserDto } from './user.dto';
 import { RoleService } from '../role/role.service';
 
 @ApiBearerAuth()
@@ -20,8 +20,8 @@ export class UserController {
   @ApiOperation({ title: '获取用户列表' })
   @Get()
   @Permission('sys:user:list')
-  findUserAll() {
-    return this.userService.findUserAll();
+  findUserAll(@Query() getUserDto: GetUserDto) {
+    return this.userService.findUserAll(getUserDto);
   }
 
   @ApiOperation({ title: '新建用户' })

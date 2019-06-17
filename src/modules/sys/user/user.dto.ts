@@ -89,3 +89,11 @@ export class UpdateUserDto {
   @IsArray()
   roleIds: number[];
 }
+
+export class GetUserDto {
+  @ApiModelProperty({ required: false })
+  pageNum: number;
+
+  @ApiModelProperty({ required: false })
+  pageSize: number;
+}

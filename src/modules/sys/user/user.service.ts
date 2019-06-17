@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { User } from './user.entity';
 import { Role } from '../role/role.entity';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { CreateUserDto, UpdateUserDto, GetUserDto } from './user.dto';
 import * as utils from '../../../common/utils';
 
 @Injectable()
@@ -34,8 +34,13 @@ export class UserService {
   /**
    * 获取用户列表
    */
-  findUserAll(): Promise<any> {
-    return this.userRepository.find({ select: ['id', 'username', 'email', 'mobile', 'status', 'createTime', 'lastSignTime'] });
+  findUserAll(getUserDto: GetUserDto): Promise<any> {
+    const { pageNum, pageSize} = getUserDto;
+    return this.userRepository.find({
+      select: ['id', 'username', 'email', 'mobile', 'status', 'createTime', 'lastSignTime'],
+      skip: (pageNum - 1) || 0,
+      take: pageSize || 10,
+    });
   }
 
   /**
@@ -70,13 +75,18 @@ export class UserService {
     return this.userRepository.delete(userId);
   }
 
+  /**
+   * 更新用户信息
+   * @param userId
+   * @param updateUserDto
+   */
   putUserInfo(userId: number, updateUserDto: UpdateUserDto): Promise<any> {
     if (!updateUserDto.password) {
       delete updateUserDto.password;
     }
     return this.userRepository.createQueryBuilder()
       .update(User)
-      .set({...updateUserDto})
+      .set({ ...updateUserDto })
       .where('id = :id', { id: userId })
       .execute();
   }
