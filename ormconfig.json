@@ -7,5 +7,6 @@
   "database": "nest_manager",
   "entities": ["dist/**/*.entity{.ts,.js}"],
   "synchronize": true,
-  "logging": true
+  "logging": true,
+  "maxQueryExecutionTime": 1000
 }
