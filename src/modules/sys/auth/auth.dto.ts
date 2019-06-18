@@ -2,7 +2,7 @@ import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class AuthLoginDto {
-  @ApiModelProperty()
+  @ApiModelProperty({ description: '用户名' })
   @IsNotEmpty()
   @IsString()
   readonly username: string;

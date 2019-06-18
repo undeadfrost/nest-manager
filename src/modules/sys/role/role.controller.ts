@@ -1,5 +1,5 @@
-import { Controller, Get, Post, UseGuards, Body } from '@nestjs/common';
-import { ApiUseTags, ApiOperation } from '@nestjs/swagger';
+import { Controller, Get, Post, UseGuards, Body, Param, Delete } from '@nestjs/common';
+import { ApiUseTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../../../guards/auth.guard';
 import { RoleService } from './role.service';
@@ -16,6 +16,7 @@ export class RoleController {
   }
 
   @ApiOperation({ title: '获取角色列表' })
+  @ApiBearerAuth()
   @Get()
   @UseGuards(JwtAuthGuard)
   @Permission('sys:role:list')
@@ -24,6 +25,7 @@ export class RoleController {
   }
 
   @ApiOperation({ title: '新建角色' })
+  @ApiBearerAuth()
   @Post()
   @UseGuards(JwtAuthGuard)
   @Permission('sys:role:create')
@@ -32,5 +34,12 @@ export class RoleController {
     const menus = await this.menuService.findMenuByIds(menuIds);
     await this.roleService.createRole(createRoleDto, menus);
     return { status: 'success', message: '创建角色成功！' };
+  }
+
+  @ApiOperation({ title: '删除单个角色' })
+  @Delete(':id')
+  @Permission('sys:role:delete')
+  delRoleOne(@Param('id') id: number) {
+    return this.roleService.delOneRole(id);
   }
 }

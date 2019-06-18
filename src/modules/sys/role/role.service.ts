@@ -57,4 +57,8 @@ export class RoleService {
   findOneByRoleName(name: string): Promise<any> {
     return this.roleRepository.findOne({ where: { name } });
   }
+
+  delOneRole(roleId: number): Promise<any> {
+    return this.roleRepository.delete(roleId);
+  }
 }
