@@ -16,7 +16,7 @@ export class RoleController {
     private readonly menuService: MenuService) {
   }
 
-  @ApiOperation({ title: '获取角色列表' })
+  @ApiOperation({ title: '获取角色列表', description: '权限标识 sys:role:list' })
   @ApiBearerAuth()
   @Get()
   @UseGuards(JwtAuthGuard)
@@ -25,7 +25,7 @@ export class RoleController {
     return this.roleService.findRoleAll();
   }
 
-  @ApiOperation({ title: '新建角色' })
+  @ApiOperation({ title: '新建角色', description: '权限标识 sys:role:create' })
   @ApiBearerAuth()
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -44,9 +44,9 @@ export class RoleController {
     return this.roleService.delOneRole(id);
   }
 
-  @ApiOperation({ title: '更新角色信息' })
+  @ApiOperation({ title: '更新角色信息', description: '权限标识 sys:role:update' })
   @Put(':id')
-  // @Permission('sys:role:update')
+  @Permission('sys:role:update')
   async putRoleInfo(@Param('id', ParseIntPipe) id: number, @Body() createRoleDto: CreateRoleDto) {
     const menuIds: number[] = createRoleDto.menuIds;
     const menus = await this.menuService.findMenuByIds(menuIds);

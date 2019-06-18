@@ -17,14 +17,14 @@ export class UserController {
     private readonly roleService: RoleService) {
   }
 
-  @ApiOperation({ title: '获取用户列表' })
+  @ApiOperation({ title: '获取用户列表', description: '权限标识 sys:user:list' })
   @Get()
   @Permission('sys:user:list')
   findUserAll(@Query() getUserDto: GetUserDto) {
     return this.userService.findUserAll(getUserDto);
   }
 
-  @ApiOperation({ title: '新建用户' })
+  @ApiOperation({ title: '新建用户', description: '权限标识 sys:user:create' })
   @Post()
   @Permission('sys:user:create')
   async createUser(@Body() createUserDto: CreateUserDto) {
@@ -34,7 +34,7 @@ export class UserController {
     return { status: 'success', message: '创建用户成功！' };
   }
 
-  @ApiOperation({ title: '删除单个用户' })
+  @ApiOperation({ title: '删除单个用户', description: '权限标识 sys:user:delete' })
   @Delete(':id')
   @Permission('sys:user:delete')
   async delUserOne(@Param('id') id: number) {
@@ -42,7 +42,7 @@ export class UserController {
     return { status: 'success', message: '删除用户成功！' };
   }
 
-  @ApiOperation({ title: '修改用户信息' })
+  @ApiOperation({ title: '修改用户信息', description: '权限标识 sys:user:update' })
   @Put(':id')
   @Permission('sys:user:update')
   async putUserInfo(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
