@@ -23,4 +23,14 @@ export class MenuService {
       .orderBy('menu.orderNum')
       .getMany();
   }
+
+  /**
+   * 根据ids array获取菜单列表
+   * @param ids
+   */
+  findMenuByIds(ids: number[]): Promise<any> {
+    return this.menuRepository.createQueryBuilder('menu')
+      .where('menu.id IN (:...ids)', { ids: [...ids] })
+      .getMany();
+  }
 }
