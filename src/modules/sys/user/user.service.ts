@@ -90,4 +90,16 @@ export class UserService {
       .where('id = :id', { id: userId })
       .execute();
   }
+
+  /**
+   * 更新用户登陆时间
+   * @param userId
+   */
+  updateUserLastSignTime(userId: number): Promise<any> {
+    return this.userRepository.createQueryBuilder()
+    .update(User)
+    .set({lastSignTime: new Date()})
+    .where('id = :id', {id: userId})
+    .execute();
+  }
 }
