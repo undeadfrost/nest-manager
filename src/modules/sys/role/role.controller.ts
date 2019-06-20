@@ -21,8 +21,9 @@ export class RoleController {
   @ApiOperation({ title: '获取角色列表', description: '权限标识 sys:role:list' })
   @Get()
   @Permission('sys:role:list')
-  getRoleAll() {
-    return this.roleService.findRoleAll();
+  async getRoleAll() {
+    const roleList: [] = await this.roleService.findRoleAll();
+    return { status: 'success', data: roleList };
   }
 
   @ApiOperation({ title: '新建角色', description: '权限标识 sys:role:create' })
@@ -38,8 +39,9 @@ export class RoleController {
   @ApiOperation({ title: '删除单个角色', description: '权限标识 sys:role:delete' })
   @Delete(':id')
   @Permission('sys:role:delete')
-  delRoleOne(@Param('id') id: number) {
-    return this.roleService.delOneRole(id);
+  async delRoleOne(@Param('id') id: number) {
+    await this.roleService.delOneRole(id);
+    return { status: 'success', message: '删除角色成功！' };
   }
 
   @ApiOperation({ title: '更新角色信息', description: '权限标识 sys:role:update' })
@@ -48,6 +50,7 @@ export class RoleController {
   async putRoleInfo(@Param('id', ParseIntPipe) id: number, @Body() createRoleDto: CreateRoleDto) {
     const menuIds: number[] = createRoleDto.menuIds;
     const menus = await this.menuService.findMenuByIds(menuIds);
-    return this.roleService.putRoleInfo(id, createRoleDto, menus);
+    await this.roleService.putRoleInfo(id, createRoleDto, menus);
+    return { status: 'success', message: '更新角色成功！' };
   }
 }

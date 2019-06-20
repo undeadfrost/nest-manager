@@ -15,8 +15,9 @@ export class MenuController {
 
   @ApiOperation({ title: '获取菜单列表', description: '权限标识 sys:menu:list' })
   @Get()
-  // @Permission('sys:menu:list')
-  getMenuAll() {
-    return this.menuService.findMenuAll();
+  @Permission('sys:menu:list')
+  async getMenuAll() {
+    const menuList: [] = await this.menuService.findMenuAll();
+    return { status: 'success', data: menuList };
   }
 }

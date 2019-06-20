@@ -20,8 +20,9 @@ export class UserController {
   @ApiOperation({ title: '获取用户列表', description: '权限标识 sys:user:list' })
   @Get()
   @Permission('sys:user:list')
-  getUserAll(@Query() getUserDto: GetUserDto) {
-    return this.userService.findUserAll(getUserDto);
+  async getUserAll(@Query() getUserDto: GetUserDto) {
+    const userList: [] = await this.userService.findUserAll(getUserDto);
+    return { status: 'success', data: userList };
   }
 
   @ApiOperation({ title: '新建用户', description: '权限标识 sys:user:create' })
