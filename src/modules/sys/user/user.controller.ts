@@ -20,7 +20,7 @@ export class UserController {
   @ApiOperation({ title: '获取用户列表', description: '权限标识 sys:user:list' })
   @Get()
   @Permission('sys:user:list')
-  findUserAll(@Query() getUserDto: GetUserDto) {
+  getUserAll(@Query() getUserDto: GetUserDto) {
     return this.userService.findUserAll(getUserDto);
   }
 

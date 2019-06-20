@@ -33,4 +33,33 @@ export class MenuService {
       .where('menu.id IN (:...ids)', { ids: [...ids] })
       .getMany();
   }
+
+  /**
+   * 获取菜单列表
+   */
+  async findMenuAll(): Promise<any> {
+    const menuList = await this.menuRepository.find({ order: { orderNum: 'ASC' } });
+    const buttons = [];
+    const menus = [];
+    const navs = [];
+    menuList.forEach((item, index) => {
+      if (item.type === 2) {
+        buttons.push(item);
+      }
+      if (item.type === 1) {
+        menus.push(item);
+      }
+      if (!item.parentId) {
+        navs.push(item);
+      }
+    })
+    menus.forEach(menu => {
+      buttons.forEach(button => {
+        if(button.parentId === menu.id) {
+          menu.children = button;
+        }
+      })
+    })
+    return navs;
+  }
 }

@@ -8,6 +8,8 @@ import { CreateRoleDto } from './role.dto';
 import { MenuService } from '../menu/menu.service';
 import { ParseIntPipe } from '../../../pipes/parse-int.pipe';
 
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @ApiUseTags('role')
 @Controller('sys/role')
 export class RoleController {
@@ -17,18 +19,14 @@ export class RoleController {
   }
 
   @ApiOperation({ title: '获取角色列表', description: '权限标识 sys:role:list' })
-  @ApiBearerAuth()
   @Get()
-  @UseGuards(JwtAuthGuard)
   @Permission('sys:role:list')
-  findRoleAll() {
+  getRoleAll() {
     return this.roleService.findRoleAll();
   }
 
   @ApiOperation({ title: '新建角色', description: '权限标识 sys:role:create' })
-  @ApiBearerAuth()
   @Post()
-  @UseGuards(JwtAuthGuard)
   @Permission('sys:role:create')
   async createRole(@Body() createRoleDto: CreateRoleDto) {
     const menuIds: number[] = createRoleDto.menuIds;

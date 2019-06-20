@@ -6,8 +6,8 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
-    private readonly jwtService: JwtService,
-    private readonly reflector: Reflector) {
+    private readonly reflector: Reflector,
+    private readonly jwtService: JwtService) {
     super();
   }
 
@@ -27,11 +27,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
     const { exp } = user.payload;
     const timestamp = Math.round(Date.now() / 1000);
-    if ((exp - timestamp) < 900) {
+    if ((exp - timestamp) < 900) { // 判断剩余过期时间，返回新token
       const response = context.switchToHttp().getResponse();
       const accessToken = this.jwtService.sign({ username: user.username }); // 获取新Token
       response.setHeader('newToken', accessToken);
     }
+    console.log(this.jwtService);
     return user;
   }
 }
