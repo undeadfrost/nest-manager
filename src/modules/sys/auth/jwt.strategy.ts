@@ -21,6 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
     const permissions = await this.authService.getUserPermissions(user);
     user.permissions = permissions;
+    user.payload = payload;
     return user;
   }
 }
