@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -73,5 +73,17 @@ export class MenuService {
       })
     })
     return navs;
+  }
+
+  /**
+   * 删除菜单
+   * @param menuId 
+   */
+  async delMenuOne(menuId: number): Promise<any> {
+    const children: Menu[] = await this.menuRepository.find({ where: { parentId: menuId } });
+    if (children.length > 0) {
+      throw new HttpException('请先删除子菜单或者按钮', HttpStatus.PRECONDITION_FAILED);
+    }
+    return this.menuRepository.delete(menuId);
   }
 }

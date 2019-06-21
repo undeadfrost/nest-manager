@@ -15,21 +15,21 @@ export class AuthController {
   ) {
   }
 
-  @ApiOperation({title: '登录'})
+  @ApiOperation({ title: '登录', description: '账户: admin 密码: 123456 (最高全权限)' })
   @Post('login')
   async login(@Body() authLoginDto: AuthLoginDto) {
     const data = await this.authService.login(authLoginDto);
     return { status: 'success', data, message: '登录成功!' };
   }
 
-  @ApiOperation({title: '注册'})
+  @ApiOperation({ title: '注册' })
   @Post('register')
   async register(@Body() authRegisterDto: AuthRegisterDto) {
     await this.authService.register(authRegisterDto);
     return { status: 'success', message: '创建用户成功,请妥善保管信息！' };
   }
 
-  @ApiOperation({title: '获取菜单'})
+  @ApiOperation({ title: '获取菜单' })
   @ApiBearerAuth()
   @Get('navs')
   @UseGuards(JwtAuthGuard)
@@ -38,7 +38,7 @@ export class AuthController {
     return { status: 'success', data };
   }
 
-  @ApiOperation({title: '获取权限标识'})
+  @ApiOperation({ title: '获取权限标识' })
   @ApiBearerAuth()
   @Get('permissions')
   @UseGuards(JwtAuthGuard)

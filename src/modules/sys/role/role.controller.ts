@@ -40,7 +40,7 @@ export class RoleController {
   @Delete(':id')
   @Permission('sys:role:delete')
   async delRoleOne(@Param('id') id: number) {
-    await this.roleService.delOneRole(id);
+    await this.roleService.delRoleOne(id);
     return { status: 'success', message: '删除角色成功！' };
   }
 

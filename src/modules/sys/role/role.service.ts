@@ -74,7 +74,7 @@ export class RoleService {
    * 删除角色
    * @param roleId
    */
-  delOneRole(roleId: number): Promise<any> {
+  delRoleOne(roleId: number): Promise<any> {
     return this.roleRepository.delete(roleId);
   }
 
