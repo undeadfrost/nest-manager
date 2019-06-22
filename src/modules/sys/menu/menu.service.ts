@@ -1,8 +1,9 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Not } from 'typeorm';
 
 import { Menu } from './menu.entity';
+import { CreateMenuDto } from './menu.dto';
 
 @Injectable()
 export class MenuService {
@@ -85,5 +86,29 @@ export class MenuService {
       throw new HttpException('请先删除子菜单或者按钮', HttpStatus.PRECONDITION_FAILED);
     }
     return this.menuRepository.delete(menuId);
+  }
+
+  async createMenu(createMenuDto: CreateMenuDto): Promise<any> {
+    const { name, parentId, router } = createMenuDto;
+    const existMenu: Menu[] = await this.menuRepository.find({ where: { name, type: Not(2) } });
+    if (existMenu.length > 0) {
+      throw new HttpException('菜单名已存在', HttpStatus.CONFLICT);
+    }
+    // 查询父级菜单是否存在
+    if (parentId) {
+      const parentMenu = await this.menuRepository.findOne({ where: { parentId } });
+      if (!parentMenu) {
+        throw new HttpException('父级菜单不存在', HttpStatus.PRECONDITION_FAILED);
+      }
+      createMenuDto.parentName = parentMenu.name; // 添加父级菜单名
+    }
+    // 查询路由是否已存在
+    if (router) {
+      const routerMenu = await this.menuRepository.findOne({ where: { router } })
+      if (routerMenu) {
+        throw new HttpException('路由已被注册', HttpStatus.CONFLICT);
+      }
+    }
+    return this.menuRepository.save(createMenuDto);
   }
 }
