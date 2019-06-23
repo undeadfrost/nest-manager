@@ -4,11 +4,14 @@ import { ConfigService } from './config.service';
 
 @Global()
 @Module({
-  providers: [{
-    provide: ConfigService,
-    useValue: new ConfigService(`${process.env.NODE_ENV}.env`),
-  }],
+  providers: [
+    {
+      provide: ConfigService,
+      useValue: new ConfigService(`env/${process.env.NODE_ENV}.env`),
+    },
+  ],
   exports: [ConfigService],
 })
 
-export class ConfigModule { }
+export class ConfigModule {
+}

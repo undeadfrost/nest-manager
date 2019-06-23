@@ -1,27 +1,38 @@
-import { Module } from '@nestjs/common';
-import { createConnection } from 'typeorm';
+import { Module, Injectable } from '@nestjs/common';
+import { TypeOrmModule, TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { ConfigService } from '../config/config.service';
 
-const connectionFactory = {
-  provide: 'CONNECTION',
-  useFactory: (configService: ConfigService) => {
-    console.log(configService.get('DATABASE_TYPE'));
-    return createConnection({
+@Injectable()
+export class TypeOrmConfig implements TypeOrmOptionsFactory {
+  constructor(private readonly configService: ConfigService) {
+  }
+
+  createTypeOrmOptions(): TypeOrmModuleOptions {
+    console.log(`${process.cwd()}/**/*.entity{.ts,.js}`);
+    const path = process.env.NODE_ENV === 'debug' ? 'src' : 'dist';
+    return {
       type: 'mysql',
-      host: configService.get('DATABASE_HOST'),
-      port: configService.get('DATABASE_PORT'),
-      username: configService.get('DATABASE_USERNAME'),
-      password: configService.get('DATABASE_PASSWORD'),
-      database: configService.get('DATABASE_NAME'),
-      entities: configService.get('DATABASE_ENTITIES'),
-    })
-  },
-  inject: [ConfigService],
-};
+      host: this.configService.get('DATABASE_HOST'),
+      port: Number(this.configService.get('DATABASE_PORT')),
+      username: this.configService.get('DATABASE_USERNAME'),
+      password: this.configService.get('DATABASE_PASSWORD'),
+      database: this.configService.get('DATABASE_NAME'),
+      entities: [`${path}/**/*.entity{.ts,.js}`],
+      synchronize: Boolean(this.configService.get('DATABASE_SYNCHRONIZE')),
+      logging: Boolean(this.configService.get('DATABASE_LOGGING')),
+      maxQueryExecutionTime: Number(this.configService.get('DATABASE_MAX_QUERY_EXECUTION_TIM')),
+    };
+  }
+}
 
 @Module({
-  providers: [connectionFactory],
+  imports: [
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfig,
+    }),
+  ],
 })
 
-export class DatabaseModule { }
+export class DatabaseModule {
+}
