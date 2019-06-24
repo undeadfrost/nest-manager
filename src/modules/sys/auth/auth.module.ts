@@ -1,5 +1,5 @@
 import { Module, Global } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -23,6 +23,7 @@ import { MenuModule } from '../menu/menu.module';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
+  exports: [AuthService, JwtStrategy, JwtModule],
 })
 export class AuthModule {
 }
