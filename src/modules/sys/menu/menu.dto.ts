@@ -11,13 +11,13 @@ export class CreateMenuDto {
   @ValidateIf((object, value) => value !== '')
   @IsOptional()
   @IsString()
-  router: string;
+  router?: string;
 
   @ApiModelProperty({ required: false })
   @ValidateIf((object, value) => value !== '')
   @IsOptional()
   @IsInt()
-  parentId: number;
+  parentId?: number;
 
   @ApiModelProperty()
   @IsNotEmpty()
@@ -28,19 +28,58 @@ export class CreateMenuDto {
   @ValidateIf((object, value) => value !== '')
   @IsOptional()
   @IsString()
-  permission: string;
+  permission?: string;
 
   @ApiModelProperty({ required: false })
-  icon: string;
+  icon?: string;
 
   @ApiModelProperty({ required: false })
-  description: string;
+  description?: string;
 
   @ApiModelProperty({ required: false })
   @ValidateIf((object, value) => value !== '')
   @IsOptional()
   @IsInt()
-  orderNum: number;
+  orderNum?: number;
+
+  parentName?: string;
+}
+
+export class UpdateMenuDto {
+  @ApiModelProperty()
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
+  @IsOptional()
+  @IsString()
+  router?: string;
+
+  @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
+  @IsOptional()
+  @IsInt()
+  parentId?: number;
+
+  @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
+  @IsOptional()
+  @IsString()
+  permission?: string;
+
+  @ApiModelProperty({ required: false })
+  icon?: string;
+
+  @ApiModelProperty({ required: false })
+  description?: string;
+
+  @ApiModelProperty({ required: false })
+  @ValidateIf((object, value) => value !== '')
+  @IsOptional()
+  @IsInt()
+  orderNum?: number;
 
   parentName?: string;
 }

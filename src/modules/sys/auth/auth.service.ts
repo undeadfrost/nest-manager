@@ -53,7 +53,7 @@ export class AuthService {
     if (user.password !== encryptPassword) {
       throw new HttpException('密码错误!', HttpStatus.UNAUTHORIZED);
     }
-    this.userService.updateUserLastSignTime(user.id);
+    this.userService.updateUserLastSignTime(user.id).then();
     return this.createToken(username);
   }
 

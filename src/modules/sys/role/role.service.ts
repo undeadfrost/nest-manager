@@ -97,4 +97,10 @@ export class RoleService {
     newRole.menus = menus;
     return this.roleRepository.save(newRole);
   }
+
+  getRoleInfo(roleId: number): Promise<any> {
+    return this.roleRepository.createQueryBuilder()
+      .where('id = :id', { id: roleId })
+      .getOne();
+  }
 }

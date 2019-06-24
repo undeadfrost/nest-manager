@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not } from 'typeorm';
 
 import { Menu } from './menu.entity';
-import { CreateMenuDto } from './menu.dto';
+import { CreateMenuDto, UpdateMenuDto } from './menu.dto';
 
 @Injectable()
 export class MenuService {
@@ -53,7 +53,7 @@ export class MenuService {
       if (!item.parentId) {
         navs.push(item);
       }
-    })
+    });
     // 组织菜单及按钮
     menus.forEach(menu => {
       menu.children = [];
@@ -61,24 +61,26 @@ export class MenuService {
         if (menu.id === button.parentId) {
           menu.children.push(button);
         }
-      })
-    })
+      });
+    });
     // 组织目录及菜单
     navs.forEach(nav => {
-      if (nav.type === 1) return; // 如果为顶级菜单则直接跳过本次循环
+      if (nav.type === 1) {
+        return;
+      } // 如果为顶级菜单则直接跳过本次循环
       nav.children = [];
       menus.forEach(menu => {
         if (nav.id === menu.parentId) {
-          nav.children.push(menu)
+          nav.children.push(menu);
         }
-      })
-    })
+      });
+    });
     return navs;
   }
 
   /**
    * 删除菜单
-   * @param menuId 
+   * @param menuId
    */
   async delMenuOne(menuId: number): Promise<any> {
     const children: Menu[] = await this.menuRepository.find({ where: { parentId: menuId } });
@@ -88,6 +90,10 @@ export class MenuService {
     return this.menuRepository.delete(menuId);
   }
 
+  /**
+   * 新建菜单
+   * @param createMenuDto
+   */
   async createMenu(createMenuDto: CreateMenuDto): Promise<any> {
     const { name, parentId, router } = createMenuDto;
     const existMenu: Menu[] = await this.menuRepository.find({ where: { name, type: Not(2) } });
@@ -104,11 +110,15 @@ export class MenuService {
     }
     // 查询路由是否已存在
     if (router) {
-      const routerMenu = await this.menuRepository.findOne({ where: { router } })
+      const routerMenu = await this.menuRepository.findOne({ where: { router } });
       if (routerMenu) {
         throw new HttpException('路由已被注册', HttpStatus.CONFLICT);
       }
     }
     return this.menuRepository.save(createMenuDto);
+  }
+
+  updateMenu(menuId: number, updateMenuDto: UpdateMenuDto): Promise<any> {
+    return this.menuRepository.findOne();
   }
 }

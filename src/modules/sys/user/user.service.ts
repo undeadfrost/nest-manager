@@ -35,7 +35,7 @@ export class UserService {
    * 获取用户列表
    */
   findUserAll(getUserDto: GetUserDto): Promise<any> {
-    const { pageNum, pageSize} = getUserDto;
+    const { pageNum, pageSize } = getUserDto;
     return this.userRepository.find({
       select: ['id', 'username', 'email', 'mobile', 'status', 'createTime', 'lastSignTime'],
       skip: (pageNum - 1) || 0,
@@ -97,9 +97,21 @@ export class UserService {
    */
   updateUserLastSignTime(userId: number): Promise<any> {
     return this.userRepository.createQueryBuilder()
-    .update(User)
-    .set({lastSignTime: new Date()})
-    .where('id = :id', {id: userId})
-    .execute();
+      .update(User)
+      .set({ lastSignTime: new Date() })
+      .where('id = :id', { id: userId })
+      .execute();
+  }
+
+  /**
+   * 获取用户信息
+   * @param userId
+   */
+  getUserInfo(userId: number): Promise<any> {
+    return this.userRepository.createQueryBuilder('user')
+      .innerJoin('user.roles', 'role')
+      .addSelect(['role.id', 'role.name', 'role.remark'])
+      .where('user.id = :id', { id: userId })
+      .getMany();
   }
 }

@@ -1,10 +1,10 @@
-import { Controller, Get, UseGuards, Delete, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, UseGuards, Delete, Param, Post, Body, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags, ApiOperation } from '@nestjs/swagger';
 
 import { MenuService } from './menu.service';
 import { JwtAuthGuard } from '../../../guards/auth.guard';
 import { Permission } from '../../../decorator/permission.decorator';
-import { CreateMenuDto } from './menu.dto';
+import { CreateMenuDto, UpdateMenuDto } from './menu.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -35,6 +35,14 @@ export class MenuController {
   @Permission('sys:menu:create')
   async createMenu(@Body() createMenuDto: CreateMenuDto) {
     await this.menuService.createMenu(createMenuDto);
-    return { status: 'success', message: '创建菜单成功！' }
+    return { status: 'success', message: '创建菜单成功！' };
+  }
+
+  @ApiOperation({ title: '更新菜单信息', description: '权限标识 sys:menu:update' })
+  @Put(':id')
+  @Permission('sys:menu:update')
+  async putMenu(@Param('id') id: number, @Body() updateMenuDto: UpdateMenuDto) {
+    await this.menuService.updateMenu(id, updateMenuDto);
+    return { status: 'success', message: '更新菜单成功！' };
   }
 }

@@ -25,6 +25,14 @@ export class UserController {
     return { status: 'success', data: userList };
   }
 
+  @ApiOperation({ title: '获取用户信息', description: '权限标识 sys:user:info' })
+  @Get(':id')
+  @Permission('sys:user:info')
+  async getUserInfo(@Param('id') id: number) {
+    const userInfo = await this.userService.getUserInfo(id);
+    return { status: 'success', data: userInfo };
+  }
+
   @ApiOperation({ title: '新建用户', description: '权限标识 sys:user:create' })
   @Post()
   @Permission('sys:user:create')

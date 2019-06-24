@@ -26,6 +26,14 @@ export class RoleController {
     return { status: 'success', data: roleList };
   }
 
+  @ApiOperation({ title: '获取角色信息', description: '权限标识 sys:role:info' })
+  @Get(':id')
+  // @Permission('sys:role:info')
+  async getRoleInfo(@Param('id') id: number) {
+    const roleInfo = await this.roleService.getRoleInfo(id);
+    return { status: 'success', data: roleInfo };
+  }
+
   @ApiOperation({ title: '新建角色', description: '权限标识 sys:role:create' })
   @Post()
   @Permission('sys:role:create')
