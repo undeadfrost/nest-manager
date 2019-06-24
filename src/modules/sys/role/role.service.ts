@@ -98,9 +98,21 @@ export class RoleService {
     return this.roleRepository.save(newRole);
   }
 
-  getRoleInfo(roleId: number): Promise<any> {
-    return this.roleRepository.createQueryBuilder()
-      .where('id = :id', { id: roleId })
+  /**
+   * 获取角色信息
+   * @param roleId
+   */
+  async getRoleInfo(roleId: number): Promise<any> {
+    const role = await this.roleRepository.createQueryBuilder('role')
+      .innerJoin('role.menus', 'menu')
+      .addSelect(['menu.id'])
+      .where('role.id = :id', { id: roleId })
       .getOne();
+    const selectMenuIds: number[] = [];
+    role.menus.forEach(item => {
+      selectMenuIds.push(item.id);
+    });
+    delete role.menus;
+    return { ...role, selectMenuIds };
   }
 }
