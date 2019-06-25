@@ -22,6 +22,14 @@ export class MenuController {
     return { status: 'success', data: menuList };
   }
 
+  @ApiOperation({ title: '获取菜单信息', description: '权限标识 sys:menu:info' })
+  @Get(':id')
+  @Permission('sys:menu:info')
+  async getMenuInfo(@Param('id') id: number) {
+    const menuInfo = await this.menuService.getMenuInfo(id);
+    return { status: 'success', data: menuInfo };
+  }
+
   @ApiOperation({ title: '删除菜单', description: '权限标识 sys:menu:delete' })
   @Delete(':id')
   @Permission('sys:menu:delete')

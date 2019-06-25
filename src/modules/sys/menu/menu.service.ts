@@ -121,4 +121,8 @@ export class MenuService {
   updateMenu(menuId: number, updateMenuDto: UpdateMenuDto): Promise<any> {
     return this.menuRepository.findOne();
   }
+
+  getMenuInfo(menuId: number): Promise<any> {
+    return this.menuRepository.findOne(menuId);
+  }
 }
