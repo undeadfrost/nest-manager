@@ -96,8 +96,8 @@ export class MenuService {
    */
   async createMenu(createMenuDto: CreateMenuDto): Promise<any> {
     const { name, parentId, router } = createMenuDto;
-    const existMenu: Menu[] = await this.menuRepository.find({ where: { name, type: Not(2) } });
-    if (existMenu.length > 0) {
+    const existMenu: Menu = await this.menuRepository.findOne({ where: { name, type: Not(2) } });
+    if (existMenu) {
       throw new HttpException('菜单名已存在', HttpStatus.CONFLICT);
     }
     // 查询父级菜单是否存在
@@ -118,8 +118,33 @@ export class MenuService {
     return this.menuRepository.save(createMenuDto);
   }
 
-  updateMenu(menuId: number, updateMenuDto: UpdateMenuDto): Promise<any> {
-    return this.menuRepository.findOne();
+  /**
+   * 更新菜单信息
+   * @param menuId
+   * @param updateMenuDto 
+   */
+  async updateMenu(menuId: number, updateMenuDto: UpdateMenuDto): Promise<any> {
+    const { name, parentId, router } = updateMenuDto;
+    const existMenu: Menu = await this.menuRepository.findOne({ where: { name, type: Not(2), id: Not(menuId) } });
+    if (existMenu) {
+      throw new HttpException('菜单名已存在', HttpStatus.CONFLICT);
+    }
+    // 查询父级菜单是否存在
+    if (parentId) {
+      const parentMenu = await this.menuRepository.findOne({ where: { parentId } });
+      if (!parentMenu) {
+        throw new HttpException('父级菜单不存在', HttpStatus.PRECONDITION_FAILED);
+      }
+      updateMenuDto.parentName = parentMenu.name; // 添加父级菜单名
+    }
+    // 查询路由是否已存在
+    if (router) {
+      const routerMenu = await this.menuRepository.findOne({ where: { router } });
+      if (routerMenu) {
+        throw new HttpException('路由已被注册', HttpStatus.CONFLICT);
+      }
+    }
+    return this.menuRepository.createQueryBuilder().update(Menu).set({ ...updateMenuDto }).where('id = :id', { id: menuId }).execute();
   }
 
   getMenuInfo(menuId: number): Promise<any> {
