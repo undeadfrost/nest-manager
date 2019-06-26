@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
+import { Exclude } from 'class-transformer';
 
 import { Role } from '../role/role.entity';
 
