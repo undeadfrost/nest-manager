@@ -32,7 +32,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       const accessToken = this.jwtService.sign({ username: user.username }); // 获取新Token
       response.setHeader('newToken', accessToken);
     }
-    console.log(this.jwtService);
     return user;
   }
 }

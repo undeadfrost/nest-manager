@@ -9,7 +9,6 @@ export class TypeOrmConfig implements TypeOrmOptionsFactory {
   }
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    console.log(`${process.cwd()}/**/*.entity{.ts,.js}`);
     const path = process.env.NODE_ENV === 'debug' ? 'src' : 'dist';
     return {
       type: 'mysql',

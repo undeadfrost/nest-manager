@@ -5,6 +5,7 @@ import * as helmet from 'helmet';
 import { ValidationPipe } from './pipes/validation.pipe';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { ConfigService } from './processors/config/config.service';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -21,7 +22,9 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new LoggingInterceptor());
-  await app.listen(3000);
+
+  const configService = app.get(ConfigService);
+  await app.listen(configService.get('PORT'));
 }
 
 bootstrap();
