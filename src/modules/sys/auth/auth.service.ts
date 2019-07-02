@@ -47,11 +47,11 @@ export class AuthService {
     const { username, password } = authLoginDto;
     const user: User = await this.userService.findOneByUsername(username);
     if (!user) {
-      throw new HttpException('用户名不存在!', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('用户名不存在!', HttpStatus.OK);
     }
     const encryptPassword: string = utils.cryptPassword(password, user.salt);
     if (user.password !== encryptPassword) {
-      throw new HttpException('密码错误!', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('密码错误!', HttpStatus.OK);
     }
     this.userService.updateUserLastSignTime(user.id).then();
     return this.createToken(username);
