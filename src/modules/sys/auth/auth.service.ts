@@ -22,7 +22,7 @@ export class AuthService {
    * 创建jwt令牌
    * @param username
    */
-  async createToken(username: string) {
+  createToken(username: string) {
     const jwtPayload: JwtPayload = { username };
     const accessToken = this.jwtService.sign(jwtPayload);
     return {
@@ -53,9 +53,9 @@ export class AuthService {
     if (user.password !== encryptPassword) {
       throw new HttpException('密码错误!', HttpStatus.OK);
     }
-    const token = await this.userService.updateUserLastSignTime(user.id).then();
+    this.userService.updateUserLastSignTime(user.id).then();
     const { email, mobile, portrait } = user;
-    return { token, userInfo: { username, email, mobile, portrait } };
+    return { ...this.createToken(username), userInfo: { email, mobile, portrait } };
   }
 
   /**
