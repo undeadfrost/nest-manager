@@ -55,7 +55,7 @@ export class AuthService {
     }
     this.userService.updateUserLastSignTime(user.id).then();
     const { email, mobile, portrait } = user;
-    return { ...this.createToken(username), userInfo: { email, mobile, portrait } };
+    return { ...this.createToken(username), userInfo: { username, email, mobile, portrait } };
   }
 
   /**
