@@ -53,8 +53,9 @@ export class AuthService {
     if (user.password !== encryptPassword) {
       throw new HttpException('密码错误!', HttpStatus.OK);
     }
-    this.userService.updateUserLastSignTime(user.id).then();
-    return this.createToken(username);
+    const token = await this.userService.updateUserLastSignTime(user.id).then();
+    const { email, mobile, portrait } = user;
+    return { token, userInfo: { username, email, mobile, portrait } };
   }
 
   /**
