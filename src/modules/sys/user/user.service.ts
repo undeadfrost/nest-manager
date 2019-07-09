@@ -1,11 +1,13 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as fs from 'fs';
 
 import { User } from './user.entity';
 import { Role } from '../role/role.entity';
 import { CreateUserDto, UpdateUserDto, GetUserDto } from './user.dto';
 import * as utils from '../../../common/utils';
+import { User as UserEntity } from './user.entity';
 
 @Injectable()
 export class UserService {
@@ -113,5 +115,9 @@ export class UserService {
       .addSelect(['role.id', 'role.name', 'role.remark'])
       .where('user.id = :id', { id: userId })
       .getMany();
+  }
+
+  uploadPortrait(user: UserEntity, file: any) {
+    return process.cwd();
   }
 }
