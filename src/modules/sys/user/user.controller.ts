@@ -12,7 +12,7 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiUseTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiUseTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiImplicitFile } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '../../../guards/auth.guard';
 import { UserService } from './user.service';
@@ -75,6 +75,9 @@ export class UserController {
     return { status: 'success', message: '修改用户信息成功！' };
   }
 
+  @ApiOperation({ title: '用户个人头像上传' })
+  @ApiConsumes('multipart/form-data')
+  @ApiImplicitFile({ name: 'file', required: true, description: '头像图片' })
   @Post('upload')
   @UseInterceptors(FileInterceptor('file', multerOptions))
   async uploadPortrait(@User() user: UserEntity, @UploadedFile() file: any) {
