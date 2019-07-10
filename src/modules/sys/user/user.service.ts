@@ -117,7 +117,11 @@ export class UserService {
       .getMany();
   }
 
-  uploadPortrait(user: UserEntity, file: any) {
-    return process.cwd();
+  uploadPortrait(user: UserEntity, file: any): Promise<any> {
+    return this.userRepository.createQueryBuilder()
+      .update(User)
+      .set({ portrait: `/public/upload/${file.filename}` })
+      .where('id = :id', { id: user.id })
+      .execute();
   }
 }

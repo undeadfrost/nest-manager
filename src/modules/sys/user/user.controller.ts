@@ -1,4 +1,16 @@
-import { Controller, Get, Post, UseGuards, Query, Body, Delete, Param, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Query,
+  Body,
+  Delete,
+  Param,
+  Put,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiUseTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
@@ -9,6 +21,7 @@ import { CreateUserDto, UpdateUserDto, GetUserDto } from './user.dto';
 import { RoleService } from '../role/role.service';
 import { User } from '../../../decorator/user.decorator';
 import { User as UserEntity } from './user.entity';
+import { multerOptions } from '../../../common/multer';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
@@ -63,8 +76,9 @@ export class UserController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file', {dest: '/public/uploads'}))
-  uploadPortrait(@User() user: UserEntity, @UploadedFile() file: any) {
-    return this.userService.uploadPortrait(user, file);
+  @UseInterceptors(FileInterceptor('file', multerOptions))
+  async uploadPortrait(@User() user: UserEntity, @UploadedFile() file: any) {
+    await this.userService.uploadPortrait(user, file);
+    return { status: 'success', message: '头像上传成功！' };
   }
 }
