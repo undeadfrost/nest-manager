@@ -78,7 +78,7 @@ export class UserController {
   @ApiOperation({ title: '用户个人头像上传' })
   @ApiConsumes('multipart/form-data')
   @ApiImplicitFile({ name: 'file', required: true, description: '头像图片' })
-  @Post('upload')
+  @Post('uploadPortrait')
   @UseInterceptors(FileInterceptor('file', multerOptions))
   async uploadPortrait(@User() user: UserEntity, @UploadedFile() file: any) {
     await this.userService.uploadPortrait(user, file);
