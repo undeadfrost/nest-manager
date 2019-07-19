@@ -119,7 +119,7 @@ export class UserService {
   uploadPortrait(user: UserEntity, file: any): Promise<any> {
     return this.userRepository.createQueryBuilder()
       .update(User)
-      .set({ portrait: `/public/upload/${file.filename}` })
+      .set({ portrait: `/public/uploads/${file.filename}` })
       .where('id = :id', { id: user.id })
       .execute();
   }
