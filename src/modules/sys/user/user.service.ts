@@ -4,9 +4,10 @@ import { Repository } from 'typeorm';
 
 import { User } from './user.entity';
 import { Role } from '../role/role.entity';
-import { CreateUserDto, UpdateUserDto, GetUserDto } from './user.dto';
+import { CreateUserDto, UpdateUserDto, GetUserDto, ChangePasswordDto } from './user.dto';
 import * as utils from '../../../common/utils';
 import { User as UserEntity } from './user.entity';
+import { cryptPassword } from '../../../common/utils';
 
 @Injectable()
 export class UserService {
@@ -120,6 +121,20 @@ export class UserService {
     return this.userRepository.createQueryBuilder()
       .update(User)
       .set({ portrait: `/public/uploads/${file.filename}` })
+      .where('id = :id', { id: user.id })
+      .execute();
+  }
+
+  changePassword(user: UserEntity, changePasswordDto: ChangePasswordDto): Promise<any> {
+    const { password, confirmPassword } = changePasswordDto;
+    if (password !== confirmPassword) {
+      throw new HttpException('密码不一致！', HttpStatus.BAD_REQUEST);
+    }
+    const salt: string = utils.getRandomSalt();
+    const encryptionPassword = utils.cryptPassword(password, salt);
+    return this.userRepository.createQueryBuilder()
+      .update(User)
+      .set({ password: encryptionPassword, salt })
       .where('id = :id', { id: user.id })
       .execute();
   }

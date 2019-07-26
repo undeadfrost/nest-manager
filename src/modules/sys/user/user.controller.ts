@@ -17,7 +17,7 @@ import { ApiUseTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiImplicitFile }
 import { JwtAuthGuard } from '../../../guards/auth.guard';
 import { UserService } from './user.service';
 import { Permission } from '../../../decorator/permission.decorator';
-import { CreateUserDto, UpdateUserDto, GetUserDto } from './user.dto';
+import { CreateUserDto, UpdateUserDto, GetUserDto, ChangePasswordDto } from './user.dto';
 import { RoleService } from '../role/role.service';
 import { User } from '../../../decorator/user.decorator';
 import { User as UserEntity } from './user.entity';
@@ -83,5 +83,12 @@ export class UserController {
   async uploadPortrait(@User() user: UserEntity, @UploadedFile() file: any) {
     await this.userService.uploadPortrait(user, file);
     return { status: 'success', message: '头像上传成功！' };
+  }
+
+  @ApiOperation({ title: '修改个人密码' })
+  @Post('security')
+  async changePassword(@User() user: UserEntity, @Body() changePasswordDto: ChangePasswordDto) {
+    await this.userService.changePassword(user, changePasswordDto);
+    return { status: 'success', message: '修改密码成功！' };
   }
 }

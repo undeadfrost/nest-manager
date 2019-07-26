@@ -8,7 +8,6 @@ import {
   IsMobilePhone,
   IsBoolean,
   IsArray,
-  IsNumber,
   ValidateIf,
 } from 'class-validator';
 import { ApiModelProperty } from '@nestjs/swagger';
@@ -96,4 +95,20 @@ export class GetUserDto {
 
   @ApiModelProperty({ required: false })
   pageSize: number;
+}
+
+export class ChangePasswordDto {
+  @ApiModelProperty()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
+  @MaxLength(25)
+  password: string;
+
+  @ApiModelProperty()
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(5)
+  @MaxLength(25)
+  confirmPassword: string;
 }
