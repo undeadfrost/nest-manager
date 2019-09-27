@@ -29,6 +29,15 @@ export class AuthController {
     return { status: 'success', message: '创建用户成功,请妥善保管信息！' };
   }
 
+  @ApiOperation({ title: '获取当前用户信息' })
+  @ApiBearerAuth()
+  @Get('userInfo')
+  @UseGuards(JwtAuthGuard)
+  async getUserInfo(@User() user: UserEntity) {
+    const { username, email, mobile, portrait } = user;
+    return { username, email, mobile, portrait };
+  }
+
   @ApiOperation({ title: '获取菜单' })
   @ApiBearerAuth()
   @Get('navs')

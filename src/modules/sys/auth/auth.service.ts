@@ -54,8 +54,7 @@ export class AuthService {
       throw new HttpException('密码错误!', HttpStatus.OK);
     }
     this.userService.updateUserLastSignTime(user.id).then();
-    const { email, mobile, portrait } = user;
-    return { ...this.createToken(username), userInfo: { username, email, mobile, portrait } };
+    return { ...this.createToken(username)};
   }
 
   /**
